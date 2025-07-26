@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Cakes — Ваша неоновая кондитерская</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Jost:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    
+    <!-- GSAP библиотека -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Анимация входа для больших экранов -->
+    <div id="cake-intro" class="cake-intro-overlay">
+        <div class="cake-animation-container">
+            <div class="cake-wrapper">
+                <!-- GSAP анимированный торт -->
+                <div class="gsap-cake">
+                    <!-- Платформа для торта -->
+                    <div class="cake-plate"></div>
+                    
+                    <!-- Слои торта (снизу вверх) -->
+                    <div class="cake-layer layer-1">
+                        <div class="layer-base"></div>
+                        <div class="layer-shadow"></div>
+                    </div>
+                    
+                    <div class="cake-layer layer-2">
+                        <div class="layer-base"></div>
+                        <div class="layer-shadow"></div>
+                    </div>
+                    
+                    <div class="cake-layer layer-3">
+                        <div class="layer-base"></div>
+                        <div class="layer-shadow"></div>
+                    </div>
+                    
+                    <!-- Крем сверху -->
+                    <div class="cream-container">
+                        <div class="cream-drop cream-1"></div>
+                        <div class="cream-drop cream-2"></div>
+                        <div class="cream-drop cream-3"></div>
+                        <div class="cream-drop cream-4"></div>
+                        <div class="cream-drop cream-5"></div>
+                        <div class="cream-main"></div>
+                    </div>
+                    
+                    <!-- Посыпка -->
+                    <div class="sprinkles-container">
+                        <div class="sprinkle sprinkle-1"></div>
+                        <div class="sprinkle sprinkle-2"></div>
+                        <div class="sprinkle sprinkle-3"></div>
+                        <div class="sprinkle sprinkle-4"></div>
+                        <div class="sprinkle sprinkle-5"></div>
+                        <div class="sprinkle sprinkle-6"></div>
+                        <div class="sprinkle sprinkle-7"></div>
+                        <div class="sprinkle sprinkle-8"></div>
+                        <div class="sprinkle sprinkle-9"></div>
+                        <div class="sprinkle sprinkle-10"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="intro-text">
+                <h1 class="intro-simple-title">Добро пожаловать в Neon Cakes</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header id="hero">
+            <h1>🎂 Neon Cakes ✨</h1>
+            <p>Создаем десерты, которые светятся от восторга. Попробуйте и вы!</p>
+            <div class="hero-slogan">
+                <p class="main-slogan">Самые аппетитные и красивые торты только у нас!</p>
+            </div>
+        </header>
+
+        <section id="about-us">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>🍰 О нашей кондитерской</h2>
+                    <div class="about-description">
+                        <p><strong>«Сладкое Искушение» – ваша любимая кондитерская в Караганде!</strong></p>
+                        
+                        <p>Уже <strong>более 5 лет</strong> мы создаём для вас самые нежные, вкусные и красивые десерты, которые дарят радость и становятся частью ваших счастливых моментов. Каждый наш торт, пирожное и капкейк – это произведение кондитерского искусства, приготовленное с любовью и вниманием к деталям.</p>
+
+                        <div class="why-choose-us">
+                            <h3>✨ <strong>Почему выбирают нас?</strong></h3>
+                            <ul class="advantages">
+                                <li>✔ <strong>Лучшие десерты в городе</strong> – только натуральные ингредиенты и авторские рецепты.</li>
+                                <li>✔ <strong>Ручная работа</strong> – каждый десерт уникален и создаётся с душой.</li>
+                                <li>✔ <strong>Широкий ассортимент</strong> – от классических наполеонов и медовиков до современных муссовых тортов и макарун.</li>
+                                <li>✔ <strong>Индивидуальный подход</strong> – воплощаем ваши сладкие мечты в реальность!</li>
+                            </ul>
+                        </div>
+
+                        <p>Мы гордимся тем, что уже <strong>5 лет</strong> делаем Караганду слаще, и благодарим вас за доверие! Приходите за вкусом, оставайтесь за настроением.</p>
+
+                        <div class="contact-info">
+                            <p>📍 <strong>Ждём вас по адресу:</strong> ул. Ленина, 25, Караганда</p>
+                            <p>📞 <strong>Заказы по телефону:</strong> +7 (7212) 55-66-77</p>
+                        </div>
+
+                        <p class="slogan"><strong>«Сладкое Искушение» – где рождаются самые желанные десерты!</strong> 🍰💖</p>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <div class="placeholder-icon">🏪</div>
+                        <p>Фото кондитерской</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery">
+            <h2>🍰 Наши десерты</h2>
+            <div class="desserts-grid">
+                <div class="dessert-card" data-dessert="tiramisu">
+                    <div class="dessert-image">
+                        <div class="placeholder-image">🍰</div>
+                    </div>
+                    <div class="dessert-info">
+                        <h3>Тирамису</h3>
+                        <p class="price">850 ₽</p>
+                    </div>
+                </div>
+                
+                <div class="dessert-card" data-dessert="cheesecake">
+                    <div class="dessert-image">
+                        <div class="placeholder-image">🍰</div>
+                    </div>
+                    <div class="dessert-info">
+                        <h3>Чизкейк</h3>
+                        <p class="price">750 ₽</p>
+                    </div>
+                </div>
+                
+                <div class="dessert-card" data-dessert="napoleon">
+                    <div class="dessert-image">
+                        <div class="placeholder-image">🥧</div>
+                    </div>
+                    <div class="dessert-info">
+                        <h3>Наполеон</h3>
+                        <p class="price">680 ₽</p>
+                    </div>
+                </div>
+                
+                <div class="dessert-card" data-dessert="medovik">
+                    <div class="dessert-image">
+                        <div class="placeholder-image">🍯</div>
+                    </div>
+                    <div class="dessert-info">
+                        <h3>Медовик</h3>
+                        <p class="price">720 ₽</p>
+                    </div>
+                </div>
+                
+                <div class="dessert-card" data-dessert="redvelvet">
+                    <div class="dessert-image">
+                        <div class="placeholder-image">❤️</div>
+                    </div>
+                    <div class="dessert-info">
+                        <h3>Красный бархат</h3>
+                        <p class="price">920 ₽</p>
+                    </div>
+                </div>
+                
+                <div class="dessert-card" data-dessert="chocolate">
+                    <div class="dessert-image">
+                        <div class="placeholder-image">🍫</div>
+                    </div>
+                    <div class="dessert-info">
+                        <h3>Шоколадный торт</h3>
+                        <p class="price">800 ₽</p>
+                    </div>
+                </div>
+                
+                <div class="dessert-card" data-dessert="strawberry">
+                    <div class="dessert-image">
+                        <div class="placeholder-image">🍓</div>
+                    </div>
+                    <div class="dessert-info">
+                        <h3>Клубничный мусс</h3>
+                        <p class="price">780 ₽</p>
+                    </div>
+                </div>
+                
+                <div class="dessert-card" data-dessert="lemon">
+                    <div class="dessert-image">
+                        <div class="placeholder-image">🍋</div>
+                    </div>
+                    <div class="dessert-info">
+                        <h3>Лимонный тарт</h3>
+                        <p class="price">650 ₽</p>
+                    </div>
+                </div>
+                
+                <div class="dessert-card" data-dessert="eclair">
+                    <div class="dessert-image">
+                        <div class="placeholder-image">🥐</div>
+                    </div>
+                    <div class="dessert-info">
+                        <h3>Эклеры</h3>
+                        <p class="price">450 ₽</p>
+                    </div>
+                </div>
+                
+                <div class="dessert-card" data-dessert="macarons">
+                    <div class="dessert-image">
+                        <div class="placeholder-image">🌸</div>
+                    </div>
+                    <div class="dessert-info">
+                        <h3>Макаруны</h3>
+                        <p class="price">380 ₽</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="constructor">
+            <h2>Соберите свой торт</h2>
+
+            <div class="constructor-step">
+                <h3>Шаг 1: Выберите основу</h3>
+                <div class="options-grid" id="bases">
+                    <div class="option" data-price="1200">
+                        <div class="name">Ванильный бисквит</div>
+                        <div class="price">1200 ₽</div>
+                    </div>
+                    <div class="option" data-price="1300">
+                        <div class="name">Шоколадный бисквит</div>
+                        <div class="price">1300 ₽</div>
+                    </div>
+                    <div class="option" data-price="1400">
+                        <div class="name">Красный бархат</div>
+                        <div class="price">1400 ₽</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="constructor-step">
+                <h3>Шаг 2: Выберите начинку</h3>
+                <div class="options-grid" id="fillings">
+                     <div class="option" data-price="400">
+                        <div class="name">Клубничный конфи</div>
+                        <div class="price">+ 400 ₽</div>
+                    </div>
+                    <div class="option" data-price="450">
+                        <div class="name">Соленая карамель</div>
+                        <div class="price">+ 450 ₽</div>
+                    </div>
+                    <div class="option" data-price="350">
+                        <div class="name">Вишневый мусс</div>
+                        <div class="price">+ 350 ₽</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="constructor-step">
+                <h3>Шаг 3: Выберите крем</h3>
+                <div class="options-grid" id="creams">
+                     <div class="option" data-price="500">
+                        <div class="name">Крем-чиз</div>
+                        <div class="price">+ 500 ₽</div>
+                    </div>
+                    <div class="option" data-price="550">
+                        <div class="name">Шоколадный ганаш</div>
+                        <div class="price">+ 550 ₽</div>
+                    </div>
+                    <div class="option" data-price="450">
+                        <div class="name">Йогуртовый</div>
+                        <div class="price">+ 450 ₽</div>
+                    </div>
+                </div>
+            </div>
+            <div class="constructor-step">
+                <h3>Шаг 4: Выбирите декор</h3>
+                <div class="options-grid" id="decorations">
+                    <div class="option" data-price="300">
+                        <div class="name">Шоколадные капли</div>
+                        <div class="price">+ 300 ₽</div>
+                    </div>
+                    <div class="option" data-price="350">
+                        <div class="name">Свежие ягоды</div>
+                        <div class="price">+ 350 ₽</div>
+                    </div>
+                    <div class="option" data-price="400">
+                        <div class="name">Цветы из мастики</div>
+                        <div class="price">+ 400 ₽</div>
+                    </div>
+                </div>
+
+            <div class="total-price-section">
+                <h3>Итоговая стоимость:</h3>
+                <div id="total-price">0 ₽</div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Свяжитесь с нами</h2>
+            <p>Для быстрого заказа или консультации напишите нам в WhatsApp!</p>
+            
+            <a href="https://wa.me/79991234567?text=Здравствуйте,%20хочу%20сделать%20заказ%20на%20вашем%20сайте!" target="_blank" class="whatsapp-button">
+                📱 Написать в WhatsApp
+            </a>
+
+            <p>Или оставьте заявку, и мы сами вам напишем:</p>
+            
+            <form class="contact-form" action="#" method="POST">
+                <input type="text" name="name" placeholder="Ваше имя" required>
+                <input type="text" name="contact" placeholder="Ваш телефон или E-mail" required>
+                <textarea name="message" rows="4" placeholder="Опишите ваши пожелания..."></textarea>
+                <button type="submit" class="submit-button">Отправить заявку</button>
+            </form>
+        </section>
+
+        <footer>
+            <p style="margin-top: 60px; font-size: 0.9rem; opacity: 0.5;">© 2025 Neon Cakes. Все права защищены.</p>
+        </footer>
+    </div>
+
+    <!-- Модальные окна для десертов -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="modal-body">
+                <div class="modal-image">
+                    <div id="modal-emoji" class="modal-emoji">🍰</div>
+                </div>
+                <div class="modal-info">
+                    <h2 id="modal-title">Название десерта</h2>
+                    <p id="modal-price" class="modal-price">Цена</p>
+                    <div id="modal-description" class="modal-description">
+                        Описание десерта
+                    </div>
+                    <div id="modal-ingredients" class="modal-ingredients">
+                        <h3>Состав:</h3>
+                        <ul id="ingredients-list">
+                        </ul>
+                    </div>
+                    <button class="order-button">Заказать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js" defer></script>
+</body>
+</html>
