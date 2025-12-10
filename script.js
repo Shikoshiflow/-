@@ -1,586 +1,352 @@
-// --- ЛОГИКА КОНСТРУКТОРА ТОРТА ---
+// --- SHIKO STUDIO MAIN JS ---
 
-// Начинаем работать только после того, как вся HTML-страница загрузилась
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 Система запущена...');
     
-    // Находим все нужные элементы на странице
-    const constructorSteps = document.querySelectorAll('.constructor-step .options-grid');
-    const totalPriceElement = document.getElementById('total-price');
-
-    // Создаем объект для хранения выбранных цен
-    const state = {
-        base: 0,
-        filling: 0,
-        cream: 0,
-        decoration: 0
-    };
-
-    // Проходим по каждому шагу конструктора (основы, начинки, кремы, декор)
-    constructorSteps.forEach(step => {
-        const options = step.querySelectorAll('.option');
-        const stepId = step.id; // Получаем id шага: 'bases', 'fillings' или 'creams'
-
-        // Для каждой опции в шаге добавляем обработчик клика
-        options.forEach(option => {
-            option.addEventListener('click', () => {
-                // Сначала убираем класс 'selected' у всех опций в этом шаге
-                options.forEach(o => o.classList.remove('selected'));
-                
-                // Затем добавляем класс 'selected' только к той, на которую кликнули
-                option.classList.add('selected');
-
-                // Обрабатываем новый шаг decorations
-                let stateKey = stepId;
-                if (stepId === 'bases') stateKey = 'base';
-                else if (stepId === 'fillings') stateKey = 'filling';
-                else if (stepId === 'creams') stateKey = 'cream';
-                else if (stepId === 'decorations') stateKey = 'decoration';
-                
-                state[stateKey] = parseInt(option.dataset.price);
-                
-                // Вызываем функцию для пересчета общей стоимости
-                updateTotalPrice();
-            });
-        });
-    });
-
-    // Функция, которая считает и отображает итоговую цену
-    function updateTotalPrice() {
-        const total = state.base + state.filling + state.cream + state.decoration;
-        totalPriceElement.textContent = `${total} ₽`;
-    }
-});
-
-// --- Обработка отправки формы (предупреждение) ---
-const form = document.querySelector('.contact-form');
-
-form.addEventListener('submit', (e) => {
-    e.preventDefault(); // Отменяем стандартную отправку формы, чтобы страница не перезагружалась
+    // 1. Инициализация всех систем
+    initializeNavigation();
+    initializeScrollEffects();
+    initializeCursorGlow();
+    initialize3DParallax(); // Новая фишка для "Реактора"
+    initializeTypewriter(); // Новая фишка для текста
     
-    // Создаем стильное уведомление
-    showNotification('✨ Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время!');
+    // 2. Загрузка проектов
+    loadPortfolioData();
+    initializeFilters();
     
-    form.reset(); // Очищаем поля формы после "отправки"
-});
-
-// Функция для показа стильного уведомления
-function showNotification(message) {
-    // Создаем элемент уведомления
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.textContent = message;
+    // 3. Форма
+    initializeContactForm();
     
-    // Добавляем стили для уведомления
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(45deg, #FF69B4, #FF1493, #DC143C);
-        color: white;
-        padding: 15px 20px;
-        border-radius: 10px;
-        box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4);
-        font-family: 'Jost', sans-serif;
-        font-weight: bold;
-        z-index: 1000;
-        animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
-        transform: translateX(100%);
-        opacity: 0;
-    `;
-    
-    // Добавляем стили анимации
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-        }
-    `;
-    document.head.appendChild(style);
-    
-    // Добавляем уведомление на страницу
-    document.body.appendChild(notification);
-    
-    // Удаляем уведомление через 3 секунды
+    // 4. Убираем прелоадер плавно
     setTimeout(() => {
-        document.body.removeChild(notification);
-        document.head.removeChild(style);
-    }, 3000);
-}
-
-// База данных десертов
-const dessertsData = {
-    tiramisu: {
-        emoji: '🍰',
-        title: 'Тирамису',
-        price: '850 ₽',
-        description: 'Классический итальянский десерт с нежными бисквитными коржами, пропитанными кофе и ликером, с воздушным кремом маскарпоне.',
-        ingredients: [
-            'Бисквитные савоярди',
-            'Крем маскарпоне',
-            'Эспрессо',
-            'Ликер Амаретто',
-            'Какао-порошок',
-            'Куриные желтки',
-            'Сахар'
-        ]
-    },
-    cheesecake: {
-        emoji: '🍰',
-        title: 'Чизкейк',
-        price: '750 ₽',
-        description: 'Нежный сырный торт на песочной основе с ванильным ароматом и ягодным топпингом.',
-        ingredients: [
-            'Творожный сыр',
-            'Песочное печенье',
-            'Сливочное масло',
-            'Ванильный экстракт',
-            'Свежие ягоды',
-            'Сахар',
-            'Яйца'
-        ]
-    },
-    napoleon: {
-        emoji: '🥧',
-        title: 'Наполеон',
-        price: '680 ₽',
-        description: 'Традиционный русский торт с хрустящими слоеными коржами и нежным заварным кремом.',
-        ingredients: [
-            'Слоеное тесто',
-            'Заварной крем',
-            'Молоко',
-            'Яйца',
-            'Сахар',
-            'Мука',
-            'Ванилин'
-        ]
-    },
-    medovik: {
-        emoji: '🍯',
-        title: 'Медовик',
-        price: '720 ₽',
-        description: 'Ароматный медовый торт с тонкими коржами и сметанным кремом, который становится только вкуснее со временем.',
-        ingredients: [
-            'Натуральный мед',
-            'Сметанный крем',
-            'Мука',
-            'Сода',
-            'Яйца',
-            'Сахар',
-            'Сметана'
-        ]
-    },
-    redvelvet: {
-        emoji: '❤️',
-        title: 'Красный бархат',
-        price: '920 ₽',
-        description: 'Изысканный торт с ярко-красными бисквитными коржами и кремом на основе сливочного сыра.',
-        ingredients: [
-            'Красный пищевой краситель',
-            'Крем-чиз',
-            'Какао-порошок',
-            'Пахта',
-            'Ванильный экстракт',
-            'Сахар',
-            'Яйца'
-        ]
-    },
-    chocolate: {
-        emoji: '🍫',
-        title: 'Шоколадный торт',
-        price: '800 ₽',
-        description: 'Богатый шоколадный торт с тремя видами шоколада и ганашем.',
-        ingredients: [
-            'Темный шоколад',
-            'Молочный шоколад',
-            'Белый шоколад',
-            'Шоколадный ганаш',
-            'Сливки',
-            'Какао-порошок',
-            'Яйца'
-        ]
-    },
-    strawberry: {
-        emoji: '🍓',
-        title: 'Клубничный мусс',
-        price: '780 ₽',
-        description: 'Легкий воздушный мусс с натуральной клубникой и ванильным бисквитом.',
-        ingredients: [
-            'Свежая клубника',
-            'Ванильный бисквит',
-            'Желатин',
-            'Сливки',
-            'Сахар',
-            'Лимонный сок',
-            'Мята'
-        ]
-    },
-    lemon: {
-        emoji: '🍋',
-        title: 'Лимонный тарт',
-        price: '650 ₽',
-        description: 'Освежающий тарт с лимонным курдом на песочной основе, украшенный меренгой.',
-        ingredients: [
-            'Лимонный курд',
-            'Песочное тесто',
-            'Лимонная цедра',
-            'Меренга',
-            'Сливочное масло',
-            'Яйца',
-            'Сахар'
-        ]
-    },
-    eclair: {
-        emoji: '🥐',
-        title: 'Эклеры',
-        price: '450 ₽',
-        description: 'Классические французские пирожные из заварного теста с ванильным кремом и шоколадной глазурью.',
-        ingredients: [
-            'Заварное тесто',
-            'Ванильный крем',
-            'Шоколадная глазурь',
-            'Молоко',
-            'Яйца',
-            'Сливочное масло',
-            'Мука'
-        ]
-    },
-    macarons: {
-        emoji: '🌸',
-        title: 'Макаруны',
-        price: '380 ₽',
-        description: 'Нежные французские миндальные пирожные с различными вкусами начинок.',
-        ingredients: [
-            'Миндальная мука',
-            'Яичные белки',
-            'Сахарная пудра',
-            'Ганаш разных вкусов',
-            'Пищевые красители',
-            'Ванильный экстракт'
-        ]
-    }
-};
-
-// Функциональность модальных окон
-document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('modal');
-    const modalClose = document.querySelector('.modal-close');
-    const dessertCards = document.querySelectorAll('.dessert-card');
-    
-    // Открытие модального окна
-    dessertCards.forEach(card => {
-        card.addEventListener('click', () => {
-            const dessertId = card.getAttribute('data-dessert');
-            const dessertInfo = dessertsData[dessertId];
-            
-            if (dessertInfo) {
-                // Заполняем модальное окно данными
-                document.getElementById('modal-emoji').textContent = dessertInfo.emoji;
-                document.getElementById('modal-title').textContent = dessertInfo.title;
-                document.getElementById('modal-price').textContent = dessertInfo.price;
-                document.getElementById('modal-description').textContent = dessertInfo.description;
-                
-                // Заполняем список ингредиентов
-                const ingredientsList = document.getElementById('ingredients-list');
-                ingredientsList.innerHTML = '';
-                dessertInfo.ingredients.forEach(ingredient => {
-                    const li = document.createElement('li');
-                    li.textContent = ingredient;
-                    ingredientsList.appendChild(li);
-                });
-                
-                // Показываем модальное окно
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-        });
-    });
-    
-    // Закрытие модального окна
-    modalClose.addEventListener('click', () => {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    });
-    
-    // Закрытие по клику вне модального окна
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+        const preloader = document.querySelector('.preloader');
+        if (preloader) {
+            preloader.style.opacity = '0';
+            preloader.style.pointerEvents = 'none';
         }
-    });
-    
-    // Обработчик кнопки заказа
-    document.querySelector('.order-button').addEventListener('click', () => {
-        const dessertTitle = document.getElementById('modal-title').textContent;
-        showNotification(`✨ ${dessertTitle} добавлен в корзину!`);
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    });
+    }, 1500);
 });
 
-// GSAP анимация сборки торта
-function createCakeAnimation() {
-    if (typeof gsap === 'undefined') {
-        console.error('GSAP не загружен');
-        return;
+// --- ДАННЫЕ ПОРТФОЛИО (Если сервер отключен, берем отсюда) ---
+const DEMO_PROJECTS = [
+    {
+        title: "Neon Cyberpunk Art",
+        category: "image",
+        description: "Серия генеративных изображений в стиле киберпанк.",
+        image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
+        link: "#"
+    },
+    {
+        title: "Future E-Commerce",
+        category: "web",
+        description: "Редизайн интернет-магазина техники.",
+        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop",
+        link: "#"
+    },
+    {
+        title: "Abstract Motion",
+        category: "video",
+        description: "Анимация для музыкального клипа.",
+        image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=600&auto=format&fit=crop",
+        link: "#"
+    },
+    {
+        title: "Finance App UI",
+        category: "app",
+        description: "Интерфейс мобильного банка.",
+        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop",
+        link: "#"
     }
+];
 
-    // Устанавливаем начальное состояние только для заголовка
-    gsap.set(['.intro-simple-title'], {
-        opacity: 0
+// --- 1. ЗАГРУЗКА ПОРТФОЛИО ---
+async function loadPortfolioData() {
+    const grid = document.querySelector('.portfolio-grid');
+    if (!grid) return;
+    
+    grid.innerHTML = ''; // Очистка
+    
+    // Имитация загрузки (можно заменить на реальный fetch)
+    const projects = DEMO_PROJECTS;
+
+    projects.forEach((project, index) => {
+        const item = document.createElement('div');
+        item.className = 'portfolio-item reveal';
+        item.setAttribute('data-category', project.category);
+        // Задержка анимации для каждого элемента
+        item.style.transitionDelay = `${index * 100}ms`;
+        
+        item.innerHTML = `
+            <div class="portfolio-card">
+                <div class="portfolio-image">
+                    <img src="${project.image}" alt="${project.title}" loading="lazy">
+                </div>
+                <div class="portfolio-info">
+                    <h3 class="portfolio-title">${project.title}</h3>
+                    <p class="portfolio-description">${project.description}</p>
+                </div>
+                <div class="portfolio-hover">
+                    <button class="btn btn-primary btn-small js-open-modal">Посмотреть</button>
+                </div>
+            </div>
+        `;
+        
+        // Клик по кнопке
+        const btn = item.querySelector('.js-open-modal');
+        btn.addEventListener('click', () => openModal(project));
+        
+        grid.appendChild(item);
     });
-
-    // Создаем timeline для последовательной анимации
-    const tl = gsap.timeline();
-
-    // 1. Появление платформы
-    tl.fromTo('.cake-plate', 
-        {
-            opacity: 0,
-            scale: 0.3,
-            rotationX: -90
-        },
-        {
-            duration: 1,
-            opacity: 1,
-            scale: 1,
-            rotationX: 0,
-            ease: "back.out(1.7)"
-        }
-    )
-
-    // 2. Появление первого слоя (снизу)
-    .fromTo('.layer-1', 
-        {
-            opacity: 0,
-            y: 100,
-            scale: 0.5,
-            rotationX: -45
-        },
-        {
-            duration: 1.2,
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            rotationX: 0,
-            ease: "bounce.out"
-        }, 
-        "-=0.3"
-    )
-
-    // 3. Появление второго слоя
-    .fromTo('.layer-2', 
-        {
-            opacity: 0,
-            y: -50,
-            scale: 0.3,
-            rotation: 10
-        },
-        {
-            duration: 1.2,
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            rotation: 0,
-            ease: "elastic.out(1, 0.5)"
-        }, 
-        "-=0.4"
-    )
-
-    // 4. Появление третьего слоя
-    .fromTo('.layer-3', 
-        {
-            opacity: 0,
-            y: -80,
-            scale: 0.2,
-            rotation: -15
-        },
-        {
-            duration: 1,
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            rotation: 0,
-            ease: "back.out(2)"
-        }, 
-        "-=0.6"
-    )
-
-    // 5. Появление основы крема
-    .fromTo('.cream-main', 
-        {
-            opacity: 0,
-            scale: 0,
-            y: -30
-        },
-        {
-            duration: 0.8,
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            ease: "bounce.out"
-        }, 
-        "-=0.2"
-    )
-
-    // 6. Появление капель крема (по очереди)
-    .fromTo('.cream-drop', 
-        {
-            opacity: 0,
-            scale: 0,
-            y: -50
-        },
-        {
-            duration: 0.6,
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            ease: "bounce.out",
-            stagger: 0.1
-        }, 
-        "-=0.4"
-    )
-
-    // 7. Посыпание посыпки
-    .fromTo('.sprinkle', 
-        {
-            opacity: 0,
-            scale: 0,
-            y: -100,
-            rotation: 0
-        },
-        {
-            duration: 1.2,
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            rotation: 360,
-            ease: "bounce.out",
-            stagger: {
-                each: 0.08,
-                from: "random"
-            }
-        }, 
-        "-=0.3"
-    )
-
-    // 8. Появление заголовка одновременно с кремом
-    .fromTo('.intro-simple-title', 
-        {
-            opacity: 0,
-            y: 30,
-            scale: 0.9
-        },
-        {
-            duration: 3,
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            ease: "back.out(1.7)"
-        }, 
-        "-=3"
-    )
-
-    // 10. Пауза для чтения (7 секунд)
-    .set({}, {}, "+=7")
-
-    // 11. Скрытие всей анимации
-    .to('#cake-intro', 
-        {
-            duration: 0.5,
-            opacity: 0,
-            scale: 1.05,
-            ease: "power2.inOut"
-        }
-    )
-    .set('#cake-intro', { display: 'none' });
-
-    return tl;
+    
+    // Запускаем анимацию появления
+    initializeScrollReveal();
 }
 
-// Добавляем плавные анимации при загрузке и обрабатываем интро
-document.addEventListener('DOMContentLoaded', () => {
-    const introOverlay = document.getElementById('cake-intro');
-    const container = document.querySelector('.container');
+// --- 2. ФИЛЬТРЫ ---
+function initializeFilters() {
+    const btns = document.querySelectorAll('.filter-btn');
     
-    // Проверяем размер экрана для показа анимации
-    function shouldShowIntro() {
-        return true; // Показываем анимацию на всех устройствах
-    }
-    
-    if (shouldShowIntro() && introOverlay) {
-        // Скрываем контейнер во время интро
-        gsap.set(container, { opacity: 0, y: 30 });
-        
-        // Запускаем GSAP анимацию торта
-        const cakeAnimation = createCakeAnimation();
-        
-        // Показываем контейнер после окончания анимации
-        cakeAnimation.eventCallback("onComplete", () => {
-            gsap.to(container, {
-                duration: 0.3,
-                opacity: 1,
-                y: 0,
-                ease: "power2.out"
-            });
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Активный класс
+            btns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             
-            // Анимация появления элементов по очереди
-            const elements = document.querySelectorAll('#about-us, #gallery, .constructor-step, .total-price-section, #contact');
-            gsap.fromTo(elements, 
-                {
-                    opacity: 0,
-                    y: 10
-                },
-                {
-                    duration: 0.3,
-                    opacity: 1,
-                    y: 0,
-                    ease: "power2.out",
-                    stagger: 0.05,
-                    delay: 0.05
+            const filter = btn.getAttribute('data-filter');
+            const items = document.querySelectorAll('.portfolio-item');
+            
+            items.forEach(item => {
+                const cat = item.getAttribute('data-category');
+                
+                if (filter === 'all' || cat === filter) {
+                    item.style.display = 'block';
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0) scale(1)';
+                    }, 50);
+                } else {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(20px) scale(0.9)';
+                    setTimeout(() => item.style.display = 'none', 300);
                 }
-            );
+            });
         });
-        
-    } else {
-        // Убираем интро для маленьких экранов
-        if (introOverlay) {
-            introOverlay.style.display = 'none';
-        }
-        
-        // Обычная анимация загрузки для маленьких экранов
-        gsap.fromTo(container, 
-            { opacity: 0, y: 10 },
-            { duration: 0.3, opacity: 1, y: 0, ease: "power2.out", delay: 0.05 }
-        );
-        
-        const elements = document.querySelectorAll('#about-us, #gallery, .constructor-step, .total-price-section, #contact');
-        gsap.fromTo(elements, 
-            { opacity: 0, y: 10 },
-            {
-                duration: 0.3,
-                opacity: 1,
-                y: 0,
-                ease: "power2.out",
-                stagger: 0.05,
-                delay: 0.1
+    });
+}
+
+// --- 3. НАВИГАЦИЯ ---
+function initializeNavigation() {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const links = document.querySelectorAll('.nav-link');
+    
+    // Бургер меню
+    if (navToggle) {
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    }
+
+    // Плавный скролл и закрытие меню
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            // Закрываем меню на мобильном
+            navToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+            
+            // Плавный скролл
+            const href = link.getAttribute('href');
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
             }
-        );
+        });
+    });
+}
+
+// --- 4. ЭФФЕКТЫ ---
+
+// Скролл хедера
+function initializeScrollEffects() {
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+}
+
+// Анимация появления при скролле
+function initializeScrollReveal() {
+    const reveals = document.querySelectorAll('.reveal');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 }); 
+
+    reveals.forEach(el => observer.observe(el));
+}
+
+// Курсор-свечение
+function initializeCursorGlow() {
+    const glow = document.querySelector('.cursor-glow');
+    if (!glow) return;
+
+    document.addEventListener('mousemove', (e) => {
+        requestAnimationFrame(() => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+    });
+}
+
+// NEW: Параллакс для "Реактора" (Круг справа движется за мышкой)
+function initialize3DParallax() {
+    const container = document.querySelector('.hero-visual-container');
+    const card = document.querySelector('.hero-image-placeholder');
+    
+    if (!container || !card) return;
+
+    container.addEventListener('mousemove', (e) => {
+        const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+        const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+        
+        // Легкий наклон
+        card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    // Сброс при уходе мышки
+    container.addEventListener('mouseleave', () => {
+        card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        card.style.transition = 'all 0.5s ease';
+    });
+    
+    container.addEventListener('mouseenter', () => {
+        card.style.transition = 'none'; // Убираем задержку при входе
+    });
+}
+
+// NEW: Печатная машинка для описания
+function initializeTypewriter() {
+    const textElement = document.querySelector('.hero-description');
+    if (!textElement) return;
+    
+    const text = textElement.innerText;
+    textElement.innerText = '';
+    
+    let i = 0;
+    const speed = 20; // Скорость печати
+    
+    function typeWriter() {
+        if (i < text.length) {
+            textElement.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+        }
     }
     
-    // Обрабатываем изменение размера окна (теперь не нужно, анимация на всех устройствах)
-    // window.addEventListener('resize', () => {
-    //     if (!shouldShowIntro() && introOverlay) {
-    //         introOverlay.style.display = 'none';
-    //     }
-    // });
-});
+    // Запускаем через секунду после загрузки
+    setTimeout(typeWriter, 1000);
+}
+
+// --- 5. МОДАЛЬНОЕ ОКНО ---
+function openModal(project) {
+    // Удаляем старое если есть
+    const oldModal = document.querySelector('.project-modal');
+    if (oldModal) oldModal.remove();
+
+    const modal = document.createElement('div');
+    modal.className = 'project-modal';
+    
+    modal.innerHTML = `
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-body">
+                <div class="modal-image-container">
+                    <img src="${project.image}" alt="${project.title}">
+                </div>
+                <div class="modal-details">
+                    <h2 class="modal-title">${project.title}</h2>
+                    <p class="modal-description" style="margin-bottom: 20px;">${project.description}</p>
+                    <p style="color: #ccc; margin-bottom: 30px;">
+                        Здесь может быть подробное описание кейса, стек технологий и процесс разработки.
+                        Этот текст можно подгружать из базы данных или JSON.
+                    </p>
+                    <div class="modal-actions">
+                        <a href="${project.link}" target="_blank" class="btn btn-primary">Открыть проект</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden'; // Блок скролла
+    
+    // Анимация входа
+    requestAnimationFrame(() => modal.classList.add('active'));
+    
+    // Закрытие
+    const close = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => modal.remove(), 300);
+    };
+    
+    modal.querySelector('.modal-close').onclick = close;
+    modal.querySelector('.modal-overlay').onclick = close;
+}
+
+// --- 6. ФОРМА КОНТАКТОВ ---
+function initializeContactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const btn = form.querySelector('button[type="submit"]');
+        const originalText = btn.textContent;
+        
+        // Анимация загрузки
+        btn.textContent = 'Отправка...';
+        btn.style.opacity = '0.7';
+        
+        // Имитация отправки
+        setTimeout(() => {
+            btn.textContent = 'Успешно! ✅';
+            btn.style.background = '#10b981'; // Зеленый цвет
+            btn.style.borderColor = '#10b981';
+            btn.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
+            
+            form.reset();
+            
+            // Возврат кнопки
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+                btn.style.borderColor = '';
+                btn.style.boxShadow = '';
+                btn.style.opacity = '1';
+            }, 3000);
+        }, 1500);
+    });
+}
